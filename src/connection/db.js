@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { DB_AUTH_URL } = require('../../config/key');
-console.log('DB_AUTH_URL',DB_AUTH_URL);
+
 mongoose.connect(DB_AUTH_URL, {
 	maxPoolSize: 10
 });

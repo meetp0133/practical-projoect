@@ -1,0 +1,10 @@
+{
+	"somethingWentWrongPleaseTryAgain": "somethingWentWrongPleaseTryAgain",
+	"userAdded": "userAdded",
+	"projectAdded": "projectAdded",
+	"projectNotFound": "projectNotFound",
+	"userNotFound": "userNotFound",
+	"userUpdated": "userUpdated",
+	"projectUpdated": "projectUpdated",
+	"userListed": "userListed"
+}

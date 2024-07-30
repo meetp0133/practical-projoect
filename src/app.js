@@ -6,9 +6,13 @@ const app = express();
 const http = require('http');
 
 const { PORT } = require('../config/key');
+const i18n = require('./i18n/i18n');
 
 // Parse request data to json
 app.use(express.json());
+
+// Language file
+app.use(i18n);
 
 server = http.createServer(app)
 server.listen(PORT, () => {
@@ -20,8 +24,8 @@ app.get('/', (req, res) => {
 });
 
 // Api routes
-// const commonRoute = require('./routes/common.routes');
-// app.use(commonRoute);
+const commonRoute = require('./routes/common.routes');
+app.use(commonRoute);
 
 app.use('*', (req, res, next) => {
     res.status(404).json({
