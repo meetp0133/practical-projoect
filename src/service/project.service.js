@@ -1,17 +1,17 @@
 const { ACTIVE_STATUS } = require("../../config/key");
 const { sortBy, searchHelper, facetHelper } = require("../helpers/helper");
-const User = require("../model/user");
+const Project = require("../model/project");
 const { ObjectId } = require('mongoose').Types;
 
 
-module.exports.userListView = async (data) => {
+module.exports.projectListView = async (data) => {
     try {
         let pipeline = []
 
         if(data.userId){
             pipeline.push({
                 $match :{
-                    _id : new ObjectId(data.userId)
+                    _id : new ObjectId(data.projectId)
                 }
             })
         }
@@ -27,7 +27,7 @@ module.exports.userListView = async (data) => {
                 $lookup: {
                     from: "assignProject",
                     localField: "_id",
-                    foreignField: "userId",
+                    foreignField: "projectId",
                     pipeline: [{
                         $match: { status: ACTIVE_STATUS }
                     }],
@@ -43,27 +43,27 @@ module.exports.userListView = async (data) => {
             {
                 $lookup:
                 {
-                    from: "project",
-                    localField: "assignProjectData.projectId",
+                    from: "user",
+                    localField: "assignProjectData.userId",
                     foreignField: "_id",
                     pipeline: [{
                         $match: { status: ACTIVE_STATUS }
                     }],
-                    as: "projectData",
+                    as: "userData",
                 },
             },
             {
                 $unwind: {
-                    path: "$projectData",
+                    path: "$userData",
                     preserveNullAndEmptyArrays: true,
                 },
             },
             {
                 $addFields: {
-                    projects: {
+                    userDetails: {
                         $mergeObjects: [
                             "$assignProjectData",
-                            "$projectData",
+                            "$userData",
                         ],
                     },
                 },
@@ -71,21 +71,21 @@ module.exports.userListView = async (data) => {
             {
                 $group: {
                     _id: "$_id",
-                    fullName: {
-                        $first: "$fullName",
+                    projectName: {
+                        $first: "$projectName",
                     },
-                    email: {
-                        $first: "$email",
+                    description: {
+                        $first: "$description",
                     },
-                    projects: {
-                        $push: "$projects",
+                    userDetails: {
+                        $push: "$userDetails",
                     },
                 },
             }
         )
 
         if (data.search) {
-            let fieldsArray = ["fullName", "email"];
+            let fieldsArray = ["projectName", "description"];
             pipeline.push(searchHelper(data.search, fieldsArray));
         }
         let sort = sortBy(data.sortBy, data.sortKey)
@@ -94,8 +94,8 @@ module.exports.userListView = async (data) => {
             facetHelper(Number(data.skip), Number(data.limit))
         );
 
-        return await User.aggregate(pipeline)
+        return await Project.aggregate(pipeline)
     } catch (err) {
-        console.log(`Error(userListView)`, err);
+        console.log(`Error(projectListView)`, err);
     }
 }

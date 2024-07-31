@@ -10,15 +10,10 @@ const projectSchema = new mongoose.Schema(
     projectName: {
       type: String,
     },
-    descripion: {
+    description: {
       type: String,
       lowercase: true,
-    },
-    userIds
-     : [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'user'
-    }]
+    }
   },
   { collection: "project", timestamps: true }
 );

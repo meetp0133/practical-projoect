@@ -13,13 +13,7 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       lowercase: true,
-    },
-    projectIds: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "project",
-      },
-    ],
+    }
   },
   { collection: "user", timestamps: true }
 );
