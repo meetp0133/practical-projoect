@@ -9,4 +9,5 @@ router.get('/', (req, res) => res.send('Welcome to Project route'));
 router.post('/add-edit-project', addEditProjectValidation, validatorFunction, projectController.addEditProject);
 router.post('/list-project', projectController.projectList);
 router.post('/view-project', viewProjectValidation, validatorFunction, projectController.viewProjectDetails);
+
 module.exports = router;

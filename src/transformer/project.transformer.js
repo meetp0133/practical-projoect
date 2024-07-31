@@ -3,7 +3,7 @@ exports.transform = (data) => {
         projectId: data?._id ? data._id : "",
         projectName: data?.projectName ? data.projectName : "",
         description: data?.description ? data.description : "",
-        userDetails: data?.userDetails ? module.exports.listuserTransformer(data.userDetails) : [],
+        userDetails: (data?.userDetails && data?.userDetails[0]?.projectId) ? module.exports.listuserTransformer(data.userDetails) : [],
     };
 };
 
